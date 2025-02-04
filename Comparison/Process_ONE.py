@@ -111,6 +111,8 @@ def main(mapping_file_path, legacy_file_path, payer_file_path):
         print("Expected both responses to contain arrays")
         return
 
+    results = []
+
     for legacy_record in legacy_response_array:
         for payer_record in payer_response_array:
             status = compare_using_mapping(legacy_record, payer_record, mapping)
@@ -123,6 +125,14 @@ def main(mapping_file_path, legacy_file_path, payer_file_path):
                 payer_id = status.Payer or "UnknownPayer"
                 create_json_file(payer_id, f"Legacy_{payer_id}.json", final_response1)
                 create_json_file(payer_id, f"Payer_{payer_id}.json", final_response2)
+
+                # Append results for testing purposes
+                results.append({
+                    "payer_id": payer_id,
+                    "status_code": status.StatusCode,
+                    "matched_data": (legacy_record, payer_record)
+                })
+    return results  # ✅ Return results instead of just writing files
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process JSON data and compare using mapping")
