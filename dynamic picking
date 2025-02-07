@@ -1,0 +1,83 @@
+import os
+import pandas as pd
+import unittest
+
+def find_files(member_id, bulk_folder, single_folder):
+    bulk_file = os.path.join(bulk_folder, f"{member_id}_legacysummary.json")
+    single_files = [
+        os.path.join(single_folder, f) for f in os.listdir(single_folder)
+        if f.startswith(f"{member_id}_") and f.endswith("_ppclaims.json")
+    ]
+    return bulk_file, single_files
+
+def process_files(member_id, bulk_file, single_files):
+    if not os.path.exists(bulk_file):
+        print(f"❌ Error: Bulk response file not found for Member ID: {member_id}")
+        return
+    
+    if not single_files:
+        print(f"❌ Error: No single response files found for Member ID: {member_id}")
+        return
+    
+    print(f"✅ Processing Member ID: {member_id}")
+    print(f"   Found Bulk Response: {bulk_file}")
+    print(f"   Found {len(single_files)} Single Response Files:")
+    for file in single_files:
+        print(f"     - {file}")
+    
+    # Simulated processing step
+    print(f"🔄 Processing {len(single_files)} single response files for Member ID: {member_id}\n")
+    
+    # Delete files after processing
+    delete_files([bulk_file] + single_files)
+
+def delete_files(files):
+    for file in files:
+        try:
+            os.remove(file)
+            print(f"🗑️ Deleted: {file}")
+        except Exception as e:
+            print(f"⚠️ Error deleting {file}: {e}")
+
+def main(csv_file, bulk_folder, single_folder):
+    df = pd.read_csv(csv_file)
+    for member_id in df['Member ID']:
+        bulk_file, single_files = find_files(str(member_id), bulk_folder, single_folder)
+        process_files(str(member_id), bulk_file, single_files)
+    print("✅ All CSV records processed successfully.")
+
+class TestProcessPaths(unittest.TestCase):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    def test_bulk_single_response(self):
+        mapping_file_path = os.path.join(self.BASE_DIR, "config", "mapping.xlsx")
+        bulk_folder = os.path.join(self.BASE_DIR, "target", "jsonResponse", "bulkResponse")
+        single_folder = os.path.join(self.BASE_DIR, "target", "jsonResponse", "singleResponse")
+
+        # Ensure the directories exist
+        self.assertTrue(os.path.exists(bulk_folder), f"Bulk response directory '{bulk_folder}' not found.")
+        self.assertTrue(os.path.exists(single_folder), f"Single response directory '{single_folder}' not found.")
+
+        # Get all bulk response files
+        bulk_files = [f for f in os.listdir(bulk_folder) if f.endswith("_legacysummary.json")]
+        self.assertGreater(len(bulk_files), 0, "No bulk JSON files found.")
+
+        # Iterate over each bulk file and find corresponding single response files
+        for bulk_file in bulk_files:
+            member_id = bulk_file.split("_")[0]  # Extract member ID from file name
+            bulk_file_path = os.path.join(bulk_folder, bulk_file)
+            single_files = [
+                os.path.join(single_folder, f) for f in os.listdir(single_folder)
+                if f.startswith(f"{member_id}_") and f.endswith("_ppclaims.json")
+            ]
+            process_files(member_id, bulk_file_path, single_files)
+
+if __name__ == "__main__":
+    unittest.main()
+
+# Example usage
+csv_file = "input.csv"  # Path to CSV file
+bulk_folder = "target/jsonresponses/bulkresponses"
+single_folder = "target/jsonresponses/singleresponses"
+
+main(csv_file, bulk_folder, single_folder)
