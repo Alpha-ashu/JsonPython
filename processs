@@ -1,0 +1,119 @@
+Input and Expected Output
+Input Files and Folder Structure
+Assume the following CSV input file (input.csv):
+
+Member ID
+916845293
+948367410
+981091955
+The target folder structure:
+
+pgsql
+Copy
+Edit
+target/
+  ├── jsonresponses/
+      ├── bulkresponses/
+      │   ├── 916845293_legacysummary.json
+      │   ├── 948367410_legacysummary.json
+      │   ├── 981091955_legacysummary.json
+      │
+      ├── singleresponses/
+          ├── 916845293_43754038_ppclaims.json
+          ├── 916845293_98437012_ppclaims.json
+          ├── 916845293_67584930_ppclaims.json
+          ├── 916845293_23456789_ppclaims.json
+          ├── 916845293_19283746_ppclaims.json
+          ├── 948367410_83746512_ppclaims.json
+          ├── 948367410_43754038_ppclaims.json
+          ├── 948367410_98567321_ppclaims.json
+          ├── 948367410_74628139_ppclaims.json
+          ├── 948367410_23847592_ppclaims.json
+          ├── 981091955_56473829_ppclaims.json
+          ├── 981091955_91827364_ppclaims.json
+          ├── 981091955_37584920_ppclaims.json
+          ├── 981091955_65738294_ppclaims.json
+          ├── 981091955_28475639_ppclaims.json
+          ├── 981091955_19283745_ppclaims.json
+Expected Console Output
+bash
+Copy
+Edit
+✅ Processing Member ID: 916845293
+   Found Bulk Response: target/jsonresponses/bulkresponses/916845293_legacysummary.json
+   Found 5 Single Response Files:
+     - target/jsonresponses/singleresponses/916845293_43754038_ppclaims.json
+     - target/jsonresponses/singleresponses/916845293_98437012_ppclaims.json
+     - target/jsonresponses/singleresponses/916845293_67584930_ppclaims.json
+     - target/jsonresponses/singleresponses/916845293_23456789_ppclaims.json
+     - target/jsonresponses/singleresponses/916845293_19283746_ppclaims.json
+🔄 Processing 5 single response files for Member ID: 916845293
+
+🗑️ Deleted: target/jsonresponses/bulkresponses/916845293_legacysummary.json
+🗑️ Deleted: target/jsonresponses/singleresponses/916845293_43754038_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/916845293_98437012_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/916845293_67584930_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/916845293_23456789_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/916845293_19283746_ppclaims.json
+
+✅ Processing Member ID: 948367410
+   Found Bulk Response: target/jsonresponses/bulkresponses/948367410_legacysummary.json
+   Found 5 Single Response Files:
+     - target/jsonresponses/singleresponses/948367410_83746512_ppclaims.json
+     - target/jsonresponses/singleresponses/948367410_43754038_ppclaims.json
+     - target/jsonresponses/singleresponses/948367410_98567321_ppclaims.json
+     - target/jsonresponses/singleresponses/948367410_74628139_ppclaims.json
+     - target/jsonresponses/singleresponses/948367410_23847592_ppclaims.json
+🔄 Processing 5 single response files for Member ID: 948367410
+
+🗑️ Deleted: target/jsonresponses/bulkresponses/948367410_legacysummary.json
+🗑️ Deleted: target/jsonresponses/singleresponses/948367410_83746512_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/948367410_43754038_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/948367410_98567321_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/948367410_74628139_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/948367410_23847592_ppclaims.json
+
+✅ Processing Member ID: 981091955
+   Found Bulk Response: target/jsonresponses/bulkresponses/981091955_legacysummary.json
+   Found 6 Single Response Files:
+     - target/jsonresponses/singleresponses/981091955_56473829_ppclaims.json
+     - target/jsonresponses/singleresponses/981091955_91827364_ppclaims.json
+     - target/jsonresponses/singleresponses/981091955_37584920_ppclaims.json
+     - target/jsonresponses/singleresponses/981091955_65738294_ppclaims.json
+     - target/jsonresponses/singleresponses/981091955_28475639_ppclaims.json
+     - target/jsonresponses/singleresponses/981091955_19283745_ppclaims.json
+🔄 Processing 6 single response files for Member ID: 981091955
+
+🗑️ Deleted: target/jsonresponses/bulkresponses/981091955_legacysummary.json
+🗑️ Deleted: target/jsonresponses/singleresponses/981091955_56473829_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/981091955_91827364_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/981091955_37584920_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/981091955_65738294_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/981091955_28475639_ppclaims.json
+🗑️ Deleted: target/jsonresponses/singleresponses/981091955_19283745_ppclaims.json
+
+✅ All CSV records processed successfully.
+Error Scenarios
+If a bulk response file is missing, the script will print:
+
+javascript
+Copy
+Edit
+❌ Error: Bulk response file not found for Member ID: 123456789
+If no single response files are found for a member ID:
+
+vbnet
+Copy
+Edit
+❌ Error: No single response files found for Member ID: 916845293
+If a file deletion fails:
+
+javascript
+Copy
+Edit
+⚠️ Error deleting target/jsonresponses/singleresponses/916845293_43754038_ppclaims.json: [Error Message]
+Summary
+The script dynamically processes all member IDs from the CSV.
+It searches for bulk and single response files in respective folders.
+It processes all found files, ensuring error handling.
+Once processing is done, the script deletes the files from both bulk and single response folders.
